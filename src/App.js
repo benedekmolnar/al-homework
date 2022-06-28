@@ -1,9 +1,10 @@
 import './App.css';
+import SearchBar from "./searchBar";
 
 function App() {
   return (
     <div className="App">
-      <p>First Commit</p>
+        <SearchBar/>
     </div>
   );
 }
