@@ -2,7 +2,7 @@ import './searchBar.css';
 import {TextField, TableHead, Table, TableCell, TableRow, TableBody} from "@mui/material";
 import LoadingButton from "@mui/material/Button";
 import {useState} from "react";
-import {apiPost} from "./utility";
+import {apiPost, apiGet} from "./utility";
 
 function SearchBar(){
     const [userInput, setUserInput] = useState("");
@@ -39,6 +39,9 @@ function SearchBar(){
 }
 
 function DisplayBar({result}){
+    async function handleWikipediaClick(searchParam){
+        return await apiGet("https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=" + searchParam + "&origin=*").then(result => console.log(result))
+    }
     if (result){
         return(
             <Table>
@@ -52,7 +55,7 @@ function DisplayBar({result}){
                 <TableBody>
                     {result.map((row) => (
                         <TableRow key={row.name}>
-                            <TableCell>{row.name}</TableCell>
+                            <TableCell onClick={() => handleWikipediaClick(row.name)}>{row.name}</TableCell>
                             <TableCell>{row.score}</TableCell>
                             <TableCell>{row.genres.map(function(genre, index) {
                                 return <span key={index}>{ (index ? ', ' : '') + genre.name }</span>;

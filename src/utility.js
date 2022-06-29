@@ -11,3 +11,13 @@ export async function apiPost(url, query) {
         return data;
     }
 }
+
+export async function apiGet(url) {
+    let response = await fetch(url, {
+        method: "GET"
+    });
+    if (response.ok) {
+        let data = response.json();
+        return data;
+    }
+}
