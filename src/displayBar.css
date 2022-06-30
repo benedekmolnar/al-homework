@@ -1,0 +1,13 @@
+.summary-box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: aliceblue;
+    border: 2px solid #000;
+    boxShadow: 24;
+    pt: 2;
+    px: 4;
+    pb: 3;
+    padding: 10px;
+}

@@ -6,6 +6,7 @@ import {apiPost} from "./utility";
 import DisplayBar from "./displayBar";
 
 function SearchBar(){
+
     const [userInput, setUserInput] = useState("");
     const [data, setData] = useState("");
 

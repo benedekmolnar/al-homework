@@ -1,10 +1,23 @@
 import {apiGet} from "./utility";
-import {Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
+import {Box, Modal, Table, TableBody, TableCell, TableHead, TableRow, Typography} from "@mui/material";
+import {useState} from "react";
+import "./displayBar.css";
 
 function DisplayBar({result}){
+
+    const [filmSummary, setFilmSummary] = useState("");
+    const [openModal, setOpenModal] = useState(false);
+
+    const handleClose = () => {
+        setOpenModal(false);
+    };
+
     async function handleWikipediaClick(searchParam){
-        return await apiGet("https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=" + searchParam + "&origin=*").then(result => console.log(result))
+        setOpenModal(true);
+        return await apiGet("https://en.wikipedia.org/api/rest_v1/page/summary/" + searchParam)
+            .then(response => setFilmSummary(response.extract))
     }
+
     if (result){
         return(
             <Table>
@@ -27,6 +40,18 @@ function DisplayBar({result}){
                         </TableRow>
                     ))}
                 </TableBody>
+                <Modal
+                    open={openModal}
+                    onClose={handleClose}
+                    aria-labelledby="summary-modal-title"
+                    aria-describedby="summary-modal-description"
+                >
+                    <Box className="summary-box">
+                        <Typography>
+                            {filmSummary}
+                        </Typography>
+                    </Box>
+                </Modal>
             </Table>
         )
     }
