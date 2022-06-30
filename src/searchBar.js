@@ -1,20 +1,22 @@
 import './searchBar.css';
-import {TextField} from "@mui/material";
-import LoadingButton from "@mui/material/Button";
-import {useState} from "react";
 import {apiPost} from "./utility";
+import {useState} from "react";
+import {TextField, CircularProgress} from "@mui/material";
+import LoadingButton from "@mui/material/Button";
 import DisplayBar from "./displayBar";
 
 function SearchBar(){
 
     const [userInput, setUserInput] = useState("");
     const [data, setData] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    const handleChange = (e) => {
+    const handleSearchBarChange = (e) => {
         setUserInput(e.target.value);
     }
 
-    async function handleClick(){
+    async function handleSubmitClick(){
+        setLoading(true);
         let query = `
             query SearchMovies {
             searchMovies(query: "${userInput}") {
@@ -24,15 +26,17 @@ function SearchBar(){
                   }
                 }
              `
-        return await apiPost("https://tmdb.sandbox.zoosh.ie/dev/graphql", query).then(result => setData(result.data.searchMovies))
+        await apiPost("https://tmdb.sandbox.zoosh.ie/dev/graphql", query).then(result => setData(result.data.searchMovies))
+        setLoading(false);
     }
 
     return(
         <div className="main-container">
             <div className="search-container">
-                <TextField onChange={handleChange} fullWidth label="Search for a movie">SearchBar</TextField>
-                <LoadingButton onClick={handleClick} variant="outlined">Submit</LoadingButton>
+                <TextField onChange={handleSearchBarChange} fullWidth label="Search for a movie">SearchBar</TextField>
+                <LoadingButton onClick={handleSubmitClick} variant="outlined">Submit</LoadingButton>
             </div>
+            {loading && <CircularProgress/>}
             <div className="display-container">
                 <DisplayBar result={data}/>
             </div>
